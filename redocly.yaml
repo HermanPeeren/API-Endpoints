@@ -1,0 +1,22 @@
+# Redocly CLI lint configuration: https://redocly.com/docs/cli/rules
+# Every problem is an error. Known exceptions are listed in .redocly.lint-ignore.yaml.
+extends:
+  - recommended-strict
+rules:
+  operation-description: error
+  operation-singular-tag: error
+  operation-tag-defined: error
+  tag-description: error
+  info-license-strict: error
+  no-invalid-media-type-examples:
+    severity: error
+    allowAdditionalProperties: true
+  no-invalid-parameter-examples:
+    severity: error
+    allowAdditionalProperties: true
+  no-invalid-schema-examples:
+    severity: error
+    allowAdditionalProperties: true
+  # Joomla's {id} only matches digits, so /v1/banners/clients/{id} and /v1/banners/{id}/contenthistory
+  # do not overlap in Joomla's router.
+  no-ambiguous-paths: off

@@ -1,0 +1,58 @@
+name: Joomla development branches
+
+# Once a week: compare the spec with the routes in Joomla's development branches of the same and the
+# next minor version. A failing run means that Joomla added, removed or moved a route, so the spec needs
+# an update (in a patch release for the same minor version, or in a new minor version).
+
+on:
+  schedule:
+    - cron: '17 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  branches:
+    runs-on: ubuntu-latest
+    outputs:
+      refs: ${{ steps.refs.outputs.refs }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Development branches to check
+        id: refs
+        run: |
+          version=$(node -p "require('./src/joomla-ws-api.json').info.version")
+          major=${version%%.*}; rest=${version#*.}; minor=${rest%%.*}
+          existing=$(git ls-remote --heads https://github.com/joomla/joomla-cms.git | sed 's|.*refs/heads/||')
+          refs=()
+          for b in "${major}.${minor}-dev" "${major}.$((minor + 1))-dev" "$((major + 1)).0-dev"; do
+            if grep -qx "$b" <<< "$existing"; then refs+=("\"$b\""); fi
+          done
+          echo "refs=[$(IFS=,; echo "${refs[*]}")]" >> "$GITHUB_OUTPUT"
+
+  routes:
+    name: Routes of ${{ matrix.ref }}
+    needs: branches
+    if: needs.branches.outputs.refs != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ref: ${{ fromJSON(needs.branches.outputs.refs) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Get Joomla ${{ matrix.ref }}
+        run: |
+          git clone --quiet --depth 1 --branch "${{ matrix.ref }}" --filter=blob:none --sparse \
+            https://github.com/joomla/joomla-cms.git "$RUNNER_TEMP/joomla-cms"
+          git -C "$RUNNER_TEMP/joomla-cms" sparse-checkout set plugins/webservices api administrator/components components libraries/src
+
+      - name: Compare the spec with the routes of ${{ matrix.ref }}
+        run: node scripts/check-routes.mjs src/joomla-ws-api.json "$RUNNER_TEMP/joomla-cms"

@@ -1,0 +1,159 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate and lint
+    runs-on: ubuntu-latest
+    outputs:
+      minor: ${{ steps.version.outputs.minor }}
+      same_minor: ${{ steps.version.outputs.same_minor }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: JSON format
+        run: npm run format:check
+
+      - name: OpenAPI 3.1 schema
+        run: npm run validate:schema
+
+      - name: Redocly lint
+        run: npx redocly lint src/joomla-ws-api.json --format=github-actions
+
+      - name: Quality and completeness
+        run: npm run quality
+
+      - name: Base branch version
+        if: github.event_name == 'pull_request'
+        run: git show "origin/${{ github.base_ref }}:src/joomla-ws-api.json" > "$RUNNER_TEMP/base.json" || rm -f "$RUNNER_TEMP/base.json"
+
+      - name: Version and changelog
+        id: version
+        run: node scripts/check-version.mjs src/joomla-ws-api.json CHANGELOG.md "$RUNNER_TEMP/base.json"
+
+      - name: Build
+        run: npm run build
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: joomla-ws-api
+          path: dist/
+          retention-days: 14
+
+  routes:
+    name: Routes of Joomla ${{ needs.validate.outputs.minor }}
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Find the latest Joomla ${{ needs.validate.outputs.minor }} release
+        id: joomla
+        env:
+          MINOR: ${{ needs.validate.outputs.minor }}
+        run: |
+          tag=$(git ls-remote --tags --refs https://github.com/joomla/joomla-cms.git "refs/tags/${MINOR}.*" \
+            | sed 's|.*refs/tags/||' | grep -E "^${MINOR//./\\.}\.[0-9]+$" | sort -V | tail -n 1 || true)
+          if [ -n "$tag" ]; then
+            echo "ref=$tag" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Joomla ${MINOR} has no release yet: using the ${MINOR}-dev branch"
+            echo "ref=${MINOR}-dev" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Get Joomla ${{ steps.joomla.outputs.ref }}
+        run: |
+          git clone --quiet --depth 1 --branch "${{ steps.joomla.outputs.ref }}" --filter=blob:none --sparse \
+            https://github.com/joomla/joomla-cms.git "$RUNNER_TEMP/joomla-cms"
+          git -C "$RUNNER_TEMP/joomla-cms" sparse-checkout set plugins/webservices api administrator/components components libraries/src
+
+      - name: Compare the spec with the routes of Joomla ${{ steps.joomla.outputs.ref }}
+        run: node scripts/check-routes.mjs src/joomla-ws-api.json "$RUNNER_TEMP/joomla-cms"
+
+  api-diff:
+    name: API changes
+    if: github.event_name == 'pull_request'
+    needs: validate
+    runs-on: ubuntu-latest
+    env:
+      OASDIFF_VERSION: 1.35.0
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Base branch spec
+        id: base
+        run: |
+          if git show "origin/${{ github.base_ref }}:src/joomla-ws-api.json" > "$RUNNER_TEMP/base.json"; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::The base branch has no src/joomla-ws-api.json yet: nothing to compare"
+          fi
+
+      - name: Install oasdiff
+        if: steps.base.outputs.exists == 'true'
+        run: |
+          curl -sSfL "https://github.com/oasdiff/oasdiff/releases/download/v${OASDIFF_VERSION}/oasdiff_${OASDIFF_VERSION}_linux_amd64.tar.gz" \
+            | tar -xz -C "$RUNNER_TEMP" oasdiff
+          "$RUNNER_TEMP/oasdiff" --version
+
+      - name: Changelog of the API
+        if: steps.base.outputs.exists == 'true'
+        run: |
+          {
+            echo "## API changes compared to ${{ github.base_ref }}"
+            echo
+            "$RUNNER_TEMP/oasdiff" changelog "$RUNNER_TEMP/base.json" src/joomla-ws-api.json --format markdown || true
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Breaking changes
+        if: steps.base.outputs.exists == 'true'
+        env:
+          SAME_MINOR: ${{ needs.validate.outputs.same_minor }}
+          ACCEPTED: ${{ contains(github.event.pull_request.labels.*.name, 'accepted-breaking-change') }}
+        run: |
+          status=0
+          "$RUNNER_TEMP/oasdiff" breaking "$RUNNER_TEMP/base.json" src/joomla-ws-api.json --fail-on ERR > breaking.txt || status=$?
+          cat breaking.txt
+          if [ "$status" -eq 0 ]; then
+            echo "No breaking changes."
+            exit 0
+          fi
+          { echo "## Breaking changes"; echo; echo '```'; cat breaking.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$SAME_MINOR" != "true" ]; then
+            echo "::notice::Breaking changes in a new Joomla minor version: allowed."
+          elif [ "$ACCEPTED" = "true" ]; then
+            echo "::notice::Breaking changes accepted with the label accepted-breaking-change."
+          else
+            echo "::error::This pull request changes the API of the same Joomla minor version in a breaking way." \
+              "If it corrects the spec to match Joomla, add the label accepted-breaking-change."
+            exit 1
+          fi
