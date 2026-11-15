@@ -14,7 +14,9 @@
     "lint": "redocly lint src/joomla-ws-api.json --format=stylish",
     "quality": "node scripts/check-quality.mjs src/joomla-ws-api.json",
     "routes": "node scripts/check-routes.mjs src/joomla-ws-api.json",
-    "check": "npm run format:check && npm run validate:schema && npm run lint && npm run quality",
+    "phpstorm": "node scripts/generate-phpstorm.mjs",
+    "phpstorm:check": "node scripts/generate-phpstorm.mjs --check",
+    "check": "npm run format:check && npm run validate:schema && npm run lint && npm run quality && npm run phpstorm:check",
     "build": "node scripts/build.mjs"
   },
   "devDependencies": {

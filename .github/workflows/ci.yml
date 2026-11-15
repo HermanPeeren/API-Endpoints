@@ -46,6 +46,9 @@ jobs:
       - name: Quality and completeness
         run: npm run quality
 
+      - name: PhpStorm collection up to date
+        run: npm run phpstorm:check
+
       - name: Base branch version
         if: github.event_name == 'pull_request'
         run: git show "origin/${{ github.base_ref }}:src/joomla-ws-api.json" > "$RUNNER_TEMP/base.json" || rm -f "$RUNNER_TEMP/base.json"

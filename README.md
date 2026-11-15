@@ -51,6 +51,13 @@ The [`bruno`](https://github.com/joomla-projects/API-Endpoints/tree/bruno) branc
 [Bruno](https://www.usebruno.com) collection of the Joomla 6 API endpoints, made by René Kreijveld
 ([@renekreijveld](https://github.com/renekreijveld)). It is not yet up to date with this specification.
 
+## PhpStorm collection
+
+The [`phpstorm`](phpstorm) folder has a collection for the HTTP Client of PhpStorm and other JetBrains IDEs: a
+request for every operation of the specification, with its example request body. The `.http` files are generated
+from the specification with `npm run phpstorm`, so they are always up to date with it. See
+[`phpstorm/README.md`](phpstorm/README.md) for how to set it up.
+
 ## Credits
 
 The specification was made by Sergey Tolkachyov ([@sergeytolkachyov](https://github.com/sergeytolkachyov)) for the Joomla Manual
@@ -85,6 +92,8 @@ npm run build
 - **Quality and completeness**: summaries, descriptions, tags, `x-source`, path parameters, error responses,
   schemas and examples of each operation. The CI job summary shows how complete the spec is.
 - **Version**: `CHANGELOG.md` has a section for `info.version`, and the version does not go down.
+- **PhpStorm collection**: the `.http` files in [`phpstorm`](phpstorm) are what `npm run phpstorm` generates from the
+  spec. When you change the spec, run `npm run phpstorm` and commit the result.
 
 CI also runs these checks:
 
