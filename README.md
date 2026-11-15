@@ -1,5 +1,8 @@
 # Joomla Web Services API: OpenAPI specification
 
+[![Latest release](https://img.shields.io/github/v/release/joomla-projects/API-Endpoints?sort=semver&label=latest%20release)](https://github.com/joomla-projects/API-Endpoints/releases/latest)
+[![CI](https://github.com/joomla-projects/API-Endpoints/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/joomla-projects/API-Endpoints/actions/workflows/ci.yml)
+
 An [OpenAPI 3.1](https://learn.openapis.org/) specification of the core
 [Web Services API](https://manual.joomla.org/docs/next/web-services-api/) of Joomla: all routes of the core web
 services plugins, with authentication, parameters, request and response schemas, and examples.
@@ -12,7 +15,7 @@ The specification is one file: [`src/joomla-ws-api.json`](src/joomla-ws-api.json
 | --- | --- |
 | Latest release (web page) | https://github.com/joomla-projects/API-Endpoints/releases/latest |
 | Latest release (JSON, for tools and agents) | https://api.github.com/repos/joomla-projects/API-Endpoints/releases/latest |
-| A specific release | `https://github.com/joomla-projects/API-Endpoints/releases/download/<version>/joomla-ws-api-<version>.json` |
+| A specific release | `https://github.com/joomla-projects/API-Endpoints/releases/download/<version>/joomla-ws-api-<version>.json`, for instance [6.2.0](https://github.com/joomla-projects/API-Endpoints/releases/download/6.2.0/joomla-ws-api-6.2.0.json) |
 | Not yet released (`main`) | https://raw.githubusercontent.com/joomla-projects/API-Endpoints/main/src/joomla-ws-api.json |
 
 Each release has these files, with its version in the name: `joomla-ws-api-<version>.json`, the same spec in
@@ -61,7 +64,8 @@ That repository has the history of these changes and the tools that made them.
 ## Contributing
 
 Change `src/joomla-ws-api.json` in a pull request; you can do that in GitHub's web editor. Every pull request
-is checked automatically, and the results show up in the pull request.
+is checked automatically, and the results show up in the pull request. A pull request can be merged when the
+checks pass.
 
 To run the checks on your own computer before you open the pull request, you need Node.js 22 or later:
 
@@ -96,14 +100,18 @@ CI also runs these checks:
 ## Releasing
 
 1. In a pull request, set `info.version` in `src/joomla-ws-api.json` and add a section to `CHANGELOG.md`.
-2. After the merge, tag `main` with the version:
+2. After the merge, tag the merged `main` with the version and push the tag to joomla-projects/API-Endpoints
+   (if you work from a fork, that is your `upstream` remote):
    ```bash
+   git switch main
+   git pull upstream main
    git tag -a 6.2.1 -m "Joomla Web Services API 6.2.1"
-   git push origin 6.2.1
+   git push upstream 6.2.1
    ```
 
-The release workflow runs all checks, builds the files and creates the GitHub release. The highest version
-becomes the latest release.
+The release workflow runs all checks, builds the release files and creates the GitHub release. The highest
+version becomes the latest release; a patch release for an older minor version, such as 6.1.4 after 6.2.0,
+does not.
 
 ## License
 
