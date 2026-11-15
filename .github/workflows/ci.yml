@@ -64,7 +64,8 @@ jobs:
           retention-days: 14
 
   routes:
-    name: Routes of Joomla ${{ needs.validate.outputs.minor }}
+    # A fixed name: it is a required status check for main.
+    name: Routes
     needs: validate
     runs-on: ubuntu-latest
     steps:

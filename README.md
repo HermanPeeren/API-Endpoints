@@ -10,21 +10,29 @@ The specification is one file: [`src/joomla-ws-api.json`](src/joomla-ws-api.json
 
 | What | URL |
 | --- | --- |
-| Latest release | https://github.com/joomla-projects/API-Endpoints/releases/latest/download/joomla-ws-api.json |
-| Latest release, YAML | https://github.com/joomla-projects/API-Endpoints/releases/latest/download/joomla-ws-api.yaml |
-| A specific release | `https://github.com/joomla-projects/API-Endpoints/releases/download/<version>/joomla-ws-api.json` |
-| Release information (JSON) | https://api.github.com/repos/joomla-projects/API-Endpoints/releases/latest |
+| Latest release (web page) | https://github.com/joomla-projects/API-Endpoints/releases/latest |
+| Latest release (JSON, for tools and agents) | https://api.github.com/repos/joomla-projects/API-Endpoints/releases/latest |
+| A specific release | `https://github.com/joomla-projects/API-Endpoints/releases/download/<version>/joomla-ws-api-<version>.json` |
 | Not yet released (`main`) | https://raw.githubusercontent.com/joomla-projects/API-Endpoints/main/src/joomla-ws-api.json |
 
-For AI agents and other tools, use the first URL: it always gives the newest release. Each release also has an
-`index.html` with readable documentation (Redoc) and a `SHA256SUMS` file.
+Each release has these files, with its version in the name: `joomla-ws-api-<version>.json`, the same spec in
+YAML (`.yaml`), readable documentation (`.html`, Redoc) and checksums (`.sha256`).
+
+For AI agents and other tools: the JSON of the latest release has the version in `tag_name`, and the download
+URL of each file in `assets[].browser_download_url`. For instance:
+
+```bash
+curl -s https://api.github.com/repos/joomla-projects/API-Endpoints/releases/latest \
+  | jq -r '.assets[] | select(.name | endswith(".json")) | .browser_download_url'
+```
 
 ## Versions
 
 A release has the version of the Joomla minor version it describes: release **6.2**.x is the API of
 Joomla **6.2**. Patch releases (6.2.1, 6.2.2, ...) improve the description of the same API. When Joomla's web
 services change in a new minor version, the specification gets a release with that minor version.
-The version is in `info.version` of the spec and in the release tag, never in the file name.
+The version is in `info.version` of the spec, in the release tag and in the names of the release files; the
+source file in this repository is always `src/joomla-ws-api.json`.
 See [CHANGELOG.md](CHANGELOG.md).
 
 ## Documentation
