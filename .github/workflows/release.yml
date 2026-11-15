@@ -2,7 +2,7 @@ name: Release
 
 # Push a tag that equals info.version of src/joomla-ws-api.json, for instance 6.2.1:
 #   git tag -a 6.2.1 -m "Joomla Web Services API 6.2.1" && git push origin 6.2.1
-# The release gets the files joomla-ws-api-<version>.json, .yaml, .html and .sha256.
+# The release gets the files joomla-ws-api-<version>.json, .yaml, .html, -phpstorm.zip and .sha256.
 # The highest version becomes the "latest" release:
 #   https://api.github.com/repos/joomla-projects/API-Endpoints/releases/latest
 
@@ -57,7 +57,7 @@ jobs:
             | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
           latest=false
           [ "$highest" = "$GITHUB_REF_NAME" ] && latest=true
-          gh release create "$GITHUB_REF_NAME" dist/* \
+          gh release create "$GITHUB_REF_NAME" dist/joomla-ws-api-* \
             --verify-tag \
             --title "Joomla Web Services API $GITHUB_REF_NAME" \
             --notes-file notes.md \

@@ -1,18 +1,18 @@
 #!/usr/bin/env node
-// Generates the PhpStorm HTTP Client collection in phpstorm/ from the spec: one .http file per tag, with a
-// request for each operation. The request bodies are the examples of the spec.
+// Generates the PhpStorm HTTP Client collection in dist/phpstorm/ from the spec: one .http file per tag, with a
+// request for each operation, and the files of scripts/phpstorm/ (README and environment files). The request
+// bodies are the examples of the spec. The collection is not committed to main: the release has it as a zip file,
+// and the phpstorm branch has the collection of the latest main.
 //
-// Usage: node scripts/generate-phpstorm.mjs [--check] [spec.json]   (default: src/joomla-ws-api.json)
-//   --check: do not write, but fail when the files in phpstorm/ differ from what the spec generates.
+// Usage: node scripts/generate-phpstorm.mjs [spec.json]   (default: src/joomla-ws-api.json)
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { deref, loadSpec, METHODS, report } from './lib.mjs';
+import { deref, loadSpec, METHODS } from './lib.mjs';
 
-const OUT = 'phpstorm';
-const args = process.argv.slice(2);
-const check = args.includes('--check');
-const specFile = args.find((a) => a !== '--check') ?? 'src/joomla-ws-api.json';
+const OUT = 'dist/phpstorm';
+const STATIC = 'scripts/phpstorm';
+const specFile = process.argv[2] ?? 'src/joomla-ws-api.json';
 
 // Name of the {id} variable, by the last word of the tag
 const ID_NAMES = {
@@ -126,29 +126,12 @@ function render(tag, requests) {
   return lines.join('\n').trimEnd() + '\n';
 }
 
-const wanted = new Map([...files].map(([tag, requests]) => [`${tag}.http`, render(tag, requests)]));
-const existing = fs.existsSync(OUT) ? fs.readdirSync(OUT).filter((f) => f.endsWith('.http')) : [];
-const requests = [...files.values()].reduce((n, r) => n + r.length, 0);
+/** "Banners Categories" -> "banners-categories.http" */
+const fileName = (tag) => `${tag.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.http`;
 
-if (check) {
-  const errors = [];
-  for (const [file, contents] of wanted) {
-    const target = path.join(OUT, file);
-    if (!fs.existsSync(target)) errors.push(`${target} is missing`);
-    else if (fs.readFileSync(target, 'utf8') !== contents) errors.push(`${target} is not up to date`);
-  }
-  for (const file of existing.filter((f) => !wanted.has(f))) {
-    errors.push(`${path.join(OUT, file)} has no tag in the spec`);
-  }
-  if (errors.length) errors.push('Run "npm run phpstorm" and commit the result.');
-  report({
-    title: 'PhpStorm collection',
-    summary: [`${wanted.size} files, ${requests} requests`],
-    errors,
-  });
-} else {
-  fs.mkdirSync(OUT, { recursive: true });
-  for (const file of existing.filter((f) => !wanted.has(f))) fs.rmSync(path.join(OUT, file));
-  for (const [file, contents] of wanted) fs.writeFileSync(path.join(OUT, file), contents);
-  console.log(`${OUT}: ${wanted.size} files, ${requests} requests`);
-}
+const requests = [...files.values()].reduce((n, r) => n + r.length, 0);
+fs.rmSync(OUT, { recursive: true, force: true });
+fs.mkdirSync(OUT, { recursive: true });
+fs.cpSync(STATIC, OUT, { recursive: true });
+for (const [tag, tagRequests] of files) fs.writeFileSync(path.join(OUT, fileName(tag)), render(tag, tagRequests));
+console.log(`${OUT}: ${files.size} files, ${requests} requests`);
