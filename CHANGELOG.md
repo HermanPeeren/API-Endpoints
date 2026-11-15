@@ -3,6 +3,15 @@
 Each release describes the core Web Services API of one Joomla minor version: release 6.2.x is for
 Joomla 6.2. A patch release (6.2.1, 6.2.2, ...) improves the description of the same API.
 
+## 6.2.1
+
+The specification is the same as in 6.2.0; only `info.version` changed.
+
+- New release file `joomla-ws-api-6.2.1-phpstorm.zip`: a collection for the HTTP Client of PhpStorm and other
+  JetBrains IDEs, with a request for each operation, generated from the specification.
+- The [`phpstorm`](https://github.com/joomla-projects/API-Endpoints/tree/phpstorm) branch has the collection of the
+  newest specification in `main`.
+
 ## 6.2.0
 
 First release in this repository: the specification that is published in the
