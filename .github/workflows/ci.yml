@@ -54,6 +54,7 @@ jobs:
         id: version
         run: node scripts/check-version.mjs src/joomla-ws-api.json CHANGELOG.md "$RUNNER_TEMP/base.json"
 
+      # Also generates the PhpStorm collection
       - name: Build
         run: npm run build
 

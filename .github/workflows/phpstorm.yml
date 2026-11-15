@@ -1,0 +1,62 @@
+name: PhpStorm branch
+
+# On every push to main, the PhpStorm HTTP Client collection is generated from the spec and committed to the
+# phpstorm branch, when it changed. The commit message names the spec version and the main commit, for instance
+# "Generated from 6.2.0 (main 9bd9ea4)". The first run creates the branch.
+# The fixed collection of each release is the release file joomla-ws-api-<version>-phpstorm.zip.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phpstorm-branch
+  cancel-in-progress: false
+
+jobs:
+  phpstorm:
+    name: Update the phpstorm branch
+    # Not in forks: there the phpstorm branch can be the head of a pull request.
+    # Only from main: a manual run from another branch must not push to phpstorm.
+    if: github.repository == 'joomla-projects/API-Endpoints' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      # The generator only uses Node.js itself: no npm ci needed
+      - name: Generate the collection
+        run: node scripts/generate-phpstorm.mjs
+
+      - name: Commit to the phpstorm branch
+        run: |
+          version=$(node -p "require('./src/joomla-ws-api.json').info.version")
+          branch="$RUNNER_TEMP/phpstorm"
+          if git ls-remote --exit-code --heads origin phpstorm > /dev/null; then
+            git fetch --quiet --depth 1 origin phpstorm
+            git worktree add --quiet --detach "$branch" FETCH_HEAD
+          else
+            echo "::notice::The phpstorm branch does not exist yet: creating it"
+            git worktree add --quiet --orphan -b phpstorm-generated "$branch"
+          fi
+          cd "$branch"
+          git rm -r --quiet --ignore-unmatch .
+          cp -a "$GITHUB_WORKSPACE/dist/phpstorm/." .
+          git add -A
+          if git diff --cached --quiet; then
+            echo "The collection did not change."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" -c user.email="41898233+github-actions[bot]@users.noreply.github.com" \
+            commit --quiet -m "Generated from $version (main ${GITHUB_SHA::7})"
+          git push --quiet origin HEAD:refs/heads/phpstorm
+          git log -1 --stat --format='%s'

@@ -19,7 +19,8 @@ The specification is one file: [`src/joomla-ws-api.json`](src/joomla-ws-api.json
 | Not yet released (`main`) | https://raw.githubusercontent.com/joomla-projects/API-Endpoints/main/src/joomla-ws-api.json |
 
 Each release has these files, with its version in the name: `joomla-ws-api-<version>.json`, the same spec in
-YAML (`.yaml`), readable documentation (`.html`, Redoc) and checksums (`.sha256`).
+YAML (`.yaml`), readable documentation (`.html`, Redoc), the [PhpStorm collection](#phpstorm-collection)
+(`-phpstorm.zip`, since 6.2.1) and checksums (`.sha256`).
 
 For AI agents and other tools: the JSON of the latest release has the version in `tag_name`, and the download
 URL of each file in `assets[].browser_download_url`. For instance:
@@ -50,6 +51,22 @@ component.
 The [`bruno`](https://github.com/joomla-projects/API-Endpoints/tree/bruno) branch has a
 [Bruno](https://www.usebruno.com) collection of the Joomla 6 API endpoints, made by René Kreijveld
 ([@renekreijveld](https://github.com/renekreijveld)). It is not yet up to date with this specification.
+
+## PhpStorm collection
+
+A collection for the HTTP Client of PhpStorm and other JetBrains IDEs: a request for every operation of the
+specification, with its example request body. It is generated from the specification, so it is always up to date
+with it.
+
+- **A release**: each release since 6.2.1 has the collection of that version in
+  `joomla-ws-api-<version>-phpstorm.zip`.
+- **The [`phpstorm`](https://github.com/joomla-projects/API-Endpoints/tree/phpstorm) branch**: the collection of the
+  newest specification in `main`, also with improvements that are not released yet. It is updated automatically on
+  every change of `main`.
+
+Its [README](scripts/phpstorm/README.md) explains how to set it up. To generate the collection yourself, run
+`npm run phpstorm`: it writes the collection in `dist/phpstorm/`, from
+[`scripts/generate-phpstorm.mjs`](scripts/generate-phpstorm.mjs) and the files in [`scripts/phpstorm`](scripts/phpstorm).
 
 ## Credits
 
