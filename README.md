@@ -20,7 +20,7 @@ The specification is one file: [`src/joomla-ws-api.json`](src/joomla-ws-api.json
 
 Each release has these files, with its version in the name: `joomla-ws-api-<version>.json`, the same spec in
 YAML (`.yaml`), readable documentation (`.html`, Redoc), the [PhpStorm collection](#phpstorm-collection)
-(`-phpstorm.zip`, since the release after 6.2.0) and checksums (`.sha256`).
+(`-phpstorm.zip`, since 6.2.1) and checksums (`.sha256`).
 
 For AI agents and other tools: the JSON of the latest release has the version in `tag_name`, and the download
 URL of each file in `assets[].browser_download_url`. For instance:
@@ -58,7 +58,7 @@ A collection for the HTTP Client of PhpStorm and other JetBrains IDEs: a request
 specification, with its example request body. It is generated from the specification, so it is always up to date
 with it.
 
-- **A release**: each release after 6.2.0 has the collection of that version in
+- **A release**: each release since 6.2.1 has the collection of that version in
   `joomla-ws-api-<version>-phpstorm.zip`.
 - **The [`phpstorm`](https://github.com/joomla-projects/API-Endpoints/tree/phpstorm) branch**: the collection of the
   newest specification in `main`, also with improvements that are not released yet. It is updated automatically on

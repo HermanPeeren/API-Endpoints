@@ -37,9 +37,15 @@ const redocly = (...a) => {
   execFileSync(process.execPath, [path.join('node_modules', '@redocly', 'cli', 'bin', 'cli.js'), ...a], { stdio: 'inherit' });
 };
 
-/** Writes a zip file of the files in dir, in the folder root of the zip. Fixed dates, so a build is reproducible. */
+/**
+ * Writes a zip file of the files in dir, in the folder root of the zip. Fixed dates, so a build is reproducible.
+ * Only a flat folder: a subfolder is an error.
+ */
 function zip(dir, root, target) {
-  const names = fs.readdirSync(dir).sort();
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const other = entries.filter((e) => !e.isFile()).map((e) => e.name);
+  if (other.length) throw new Error(`zip: ${dir} may only contain files, not: ${other.join(', ')}`);
+  const names = entries.map((e) => e.name).sort();
   const local = [];
   const central = [];
   let offset = 0;
