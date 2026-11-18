@@ -4327,12 +4327,6 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc",
-                "ASC",
-                "DESC"
-              ],
               "default": "desc"
             },
             "description": "The ordering direction, asc or desc. Omitted, the order is descending; another value gives ascending."
