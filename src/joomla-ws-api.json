@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Joomla 6.2 Core Web Services API",
-    "version": "6.2.1",
+    "version": "6.2.2",
     "description": "Core Joomla Web Services API routes, authentication, request and response schemas, and form parameters. Check x-support for operation availability. Replace example URLs, tokens and IDs with site values. Installed plugins can extend forms and responses.\n\n## Authentication\n\nAuthentication is done using a Joomla API Token, sent as `Authorization: Bearer <token>` or in the `X-Joomla-Token` header. To get the token, go to the user profile in your Joomla installation and activate and copy the API key. Basic authentication with username and password only works when its plugin is enabled. The Joomla Update endpoints use the separate `X-JUpdate-Token`.\n\n## Response schemas\n\nResponse schemas and examples are derived from the Joomla source code; they are not captured from a site, unless the example says so.\n\n## Components without web services\n\n* com_associations supplies administrator tools for multilingual associations. It has no standalone web-services plugin or REST routes in these snapshots.\n* com_finder manages the Smart Search index, maps and filters. It has no core REST search or indexing routes in these snapshots.\n\n## Videos\n\n[YouTube playlist about Joomla Web Services / APIs](https://www.youtube.com/playlist?list=PLsg93PS_2NeL850YZFlAi1Eb7hwxETNkX)",
     "license": {
       "name": "GPL-2.0-or-later",
