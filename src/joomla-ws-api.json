@@ -28722,6 +28722,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_banners/src/View/Banners/JsonapiView.php"
+                  },
                   "typeAlias": {
                     "type": [
                       "string",
@@ -30320,6 +30325,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_banners/src/View/Clients/JsonapiView.php"
+                  },
                   "typeAlias": {
                     "type": [
                       "string",
@@ -31270,6 +31280,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_categories/src/View/Categories/JsonapiView.php"
+                    },
                     "title": {
                       "type": "string",
                       "maxLength": 255,
@@ -31649,6 +31664,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_categories/src/View/Categories/JsonapiView.php"
+                  },
                   "title": {
                     "type": "string",
                     "maxLength": 255,
@@ -59247,6 +59267,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_contact/src/View/Contacts/JsonapiView.php"
+                    },
                     "alias": {
                       "type": "string",
                       "maxLength": 400,
@@ -59305,6 +59330,61 @@
                         }
                       ],
                       "x-type-origin": "registry/model/view transformation"
+                    },
+                    "created_by": {
+                      "anyOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "^-?[0-9]+$"
+                        }
+                      ],
+                      "description": "ID of the user who created the item. The same user is in `relationships.created_by`.",
+                      "x-source": "api/components/com_contact/src/View/Contacts/JsonapiView.php"
+                    },
+                    "modified_by": {
+                      "anyOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "^-?[0-9]+$"
+                        }
+                      ],
+                      "description": "ID of the user who last modified the item. The same user is in `relationships.modified_by`.",
+                      "x-source": "api/components/com_contact/src/View/Contacts/JsonapiView.php"
+                    },
+                    "tags": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        },
+                        {
+                          "type": "array",
+                          "maxItems": 0
+                        }
+                      ],
+                      "description": "Always an empty array in a list: the list query does not load the tags of a contact. Read a single contact to get its tags.",
+                      "x-source": "api/components/com_contact/src/View/Contacts/JsonapiView.php"
+                    },
+                    "user_id": {
+                      "anyOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "^-?[0-9]+$"
+                        }
+                      ],
+                      "description": "ID of the Joomla user linked to the contact; 0 when no user is linked. The same user is in `relationships.user_id`.",
+                      "x-source": "api/components/com_contact/src/View/Contacts/JsonapiView.php"
                     }
                   },
                   "additionalProperties": {
@@ -59387,6 +59467,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_contact/src/View/Contacts/JsonapiView.php"
+                  },
                   "alias": {
                     "type": "string",
                     "maxLength": 400,
@@ -59707,6 +59792,61 @@
                       }
                     ],
                     "x-type-origin": "registry/model/view transformation"
+                  },
+                  "created_by": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^-?[0-9]+$"
+                      }
+                    ],
+                    "description": "ID of the user who created the item. The same user is in `relationships.created_by`.",
+                    "x-source": "api/components/com_contact/src/View/Contacts/JsonapiView.php"
+                  },
+                  "modified_by": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^-?[0-9]+$"
+                      }
+                    ],
+                    "description": "ID of the user who last modified the item. The same user is in `relationships.modified_by`.",
+                    "x-source": "api/components/com_contact/src/View/Contacts/JsonapiView.php"
+                  },
+                  "tags": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "array",
+                        "maxItems": 0
+                      }
+                    ],
+                    "description": "Tags of the item: an object with the tag ID as key and the tag title as value; an empty array when the item has no tags. The same tag IDs are in `relationships.tags`. With more than one tag, a title can be paired with the wrong ID: Joomla combines the tag IDs in the order of the tag mapping with the titles in alphabetical order (`array_combine` in the view).",
+                    "x-source": "api/components/com_contact/src/View/Contacts/JsonapiView.php"
+                  },
+                  "user_id": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^-?[0-9]+$"
+                      }
+                    ],
+                    "description": "ID of the Joomla user linked to the contact; 0 when no user is linked. The same user is in `relationships.user_id`.",
+                    "x-source": "api/components/com_contact/src/View/Contacts/JsonapiView.php"
                   }
                 },
                 "additionalProperties": {
@@ -65944,6 +66084,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_content/src/View/Articles/JsonapiView.php"
+                    },
                     "typeAlias": {
                       "type": [
                         "string",
@@ -66227,96 +66372,6 @@
                       "x-sql-type": "datetime",
                       "x-source": "installation/sql/mysql/extensions.sql"
                     },
-                    "urls": {
-                      "anyOf": [
-                        {
-                          "type": "object",
-                          "properties": {
-                            "urla": {
-                              "type": "string",
-                              "description": "URL subject to field relative/scheme settings; empty string may clear an optional URL.",
-                              "title": "Link A",
-                              "x-source": "administrator/components/com_content/forms/article.xml"
-                            },
-                            "urlatext": {
-                              "type": "string",
-                              "title": "Link A Text",
-                              "description": "Joomla form field urlatext; input is validated and filtered according to x-joomla-form.",
-                              "x-source": "administrator/components/com_content/forms/article.xml"
-                            },
-                            "targeta": {
-                              "type": [
-                                "integer",
-                                "string"
-                              ],
-                              "pattern": "^(?:-?[0-9]+)?$",
-                              "x-input-normalization": "Joomla form accepts integer or decimal integer string; optional empty string is form-filter dependent.",
-                              "title": "URL Target Window",
-                              "description": "Joomla form field targeta; input is validated and filtered according to x-joomla-form.",
-                              "x-source": "administrator/components/com_content/forms/article.xml"
-                            },
-                            "urlb": {
-                              "type": "string",
-                              "description": "URL subject to field relative/scheme settings; empty string may clear an optional URL.",
-                              "title": "Link B",
-                              "x-source": "administrator/components/com_content/forms/article.xml"
-                            },
-                            "urlbtext": {
-                              "type": "string",
-                              "title": "Link B Text",
-                              "description": "Joomla form field urlbtext; input is validated and filtered according to x-joomla-form.",
-                              "x-source": "administrator/components/com_content/forms/article.xml"
-                            },
-                            "targetb": {
-                              "type": [
-                                "integer",
-                                "string"
-                              ],
-                              "pattern": "^(?:-?[0-9]+)?$",
-                              "x-input-normalization": "Joomla form accepts integer or decimal integer string; optional empty string is form-filter dependent.",
-                              "title": "URL Target Window",
-                              "description": "Joomla form field targetb; input is validated and filtered according to x-joomla-form.",
-                              "x-source": "administrator/components/com_content/forms/article.xml"
-                            },
-                            "urlc": {
-                              "type": "string",
-                              "description": "URL subject to field relative/scheme settings; empty string may clear an optional URL.",
-                              "title": "Link C",
-                              "x-source": "administrator/components/com_content/forms/article.xml"
-                            },
-                            "urlctext": {
-                              "type": "string",
-                              "title": "Link C Text",
-                              "description": "Joomla form field urlctext; input is validated and filtered according to x-joomla-form.",
-                              "x-source": "administrator/components/com_content/forms/article.xml"
-                            },
-                            "targetc": {
-                              "type": [
-                                "integer",
-                                "string"
-                              ],
-                              "pattern": "^(?:-?[0-9]+)?$",
-                              "x-input-normalization": "Joomla form accepts integer or decimal integer string; optional empty string is form-filter dependent.",
-                              "title": "URL Target Window",
-                              "description": "Joomla form field targetc; input is validated and filtered according to x-joomla-form.",
-                              "x-source": "administrator/components/com_content/forms/article.xml"
-                            }
-                          },
-                          "additionalProperties": false
-                        },
-                        {
-                          "type": "array",
-                          "maxItems": 0
-                        },
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string"
-                        }
-                      ],
-                      "x-type-origin": "registry/model/view transformation"
-                    },
                     "created": {
                       "type": "string",
                       "x-sql-type": "datetime",
@@ -66396,6 +66451,35 @@
                       "additionalProperties": {
                         "$ref": "#/components/schemas/JsonValue"
                       }
+                    },
+                    "tags": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        },
+                        {
+                          "type": "array",
+                          "maxItems": 0
+                        }
+                      ],
+                      "description": "Tags of the item: an object with the tag ID as key and the tag title as value, ordered by title. An empty array when the item has no tags. The same tags are in `relationships.tags`.",
+                      "x-source": "api/components/com_content/src/View/Articles/JsonapiView.php"
+                    },
+                    "created_by": {
+                      "anyOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "^-?[0-9]+$"
+                        }
+                      ],
+                      "description": "ID of the user who created the item. The same user is in `relationships.created_by`.",
+                      "x-source": "api/components/com_content/src/View/Articles/JsonapiView.php"
                     }
                   },
                   "additionalProperties": {
@@ -66472,6 +66556,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_content/src/View/Articles/JsonapiView.php"
+                  },
                   "typeAlias": {
                     "type": [
                       "string",
@@ -66921,6 +67010,48 @@
                     "additionalProperties": {
                       "$ref": "#/components/schemas/JsonValue"
                     }
+                  },
+                  "tags": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "array",
+                        "maxItems": 0
+                      }
+                    ],
+                    "description": "Tags of the item: an object with the tag ID as key and the tag title as value, ordered by title. An empty array when the item has no tags. The same tags are in `relationships.tags`.",
+                    "x-source": "api/components/com_content/src/View/Articles/JsonapiView.php"
+                  },
+                  "created_by": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^-?[0-9]+$"
+                      }
+                    ],
+                    "description": "ID of the user who created the item. The same user is in `relationships.created_by`.",
+                    "x-source": "api/components/com_content/src/View/Articles/JsonapiView.php"
+                  },
+                  "modified_by": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^-?[0-9]+$"
+                      }
+                    ],
+                    "description": "ID of the user who last modified the item. The same user is in `relationships.modified_by`.",
+                    "x-source": "api/components/com_content/src/View/Articles/JsonapiView.php"
                   }
                 },
                 "additionalProperties": {
@@ -67045,7 +67176,7 @@
           "articletext": {
             "type": "string",
             "title": "Article Text",
-            "description": "Joomla form field articletext; input is validated and filtered according to x-joomla-form.",
+            "description": "Joomla form field articletext; input is validated and filtered according to x-joomla-form. On create, Joomla splits it at the read more tag (`<hr id=\"system-readmore\">`) into `introtext` and `fulltext`. When `introtext` or `fulltext` is sent as well, that value wins over the split.",
             "x-joomla-form": {
               "name": "articletext",
               "type": "editor",
@@ -68653,7 +68784,7 @@
           "articletext": {
             "type": "string",
             "title": "Article Text",
-            "description": "Joomla form field articletext; input is validated and filtered according to x-joomla-form.",
+            "description": "Joomla form field articletext; input is validated and filtered according to x-joomla-form. Has no effect on update: the API fills the stored `introtext` and `fulltext` into a PATCH request, and these override the split of `articletext`. To change the text of an existing article, send `introtext` and/or `fulltext`.",
             "x-joomla-form": {
               "name": "articletext",
               "type": "editor",
@@ -70210,6 +70341,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_content/src/View/Articles/JsonapiView.php"
+                  },
                   "typeAlias": {
                     "type": [
                       "string",
@@ -70653,6 +70789,48 @@
                     "additionalProperties": {
                       "$ref": "#/components/schemas/JsonValue"
                     }
+                  },
+                  "tags": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "array",
+                        "maxItems": 0
+                      }
+                    ],
+                    "description": "Tags of the item: an object with the tag ID as key and the tag title as value, ordered by title. An empty array when the item has no tags. The same tags are in `relationships.tags`.",
+                    "x-source": "api/components/com_content/src/View/Articles/JsonapiView.php"
+                  },
+                  "created_by": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^-?[0-9]+$"
+                      }
+                    ],
+                    "description": "ID of the user who created the item. The same user is in `relationships.created_by`.",
+                    "x-source": "api/components/com_content/src/View/Articles/JsonapiView.php"
+                  },
+                  "modified_by": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^-?[0-9]+$"
+                      }
+                    ],
+                    "description": "ID of the user who last modified the item. The same user is in `relationships.modified_by`.",
+                    "x-source": "api/components/com_content/src/View/Articles/JsonapiView.php"
                   }
                 },
                 "additionalProperties": {
@@ -79441,6 +79619,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_fields/src/View/Fields/JsonapiView.php"
+                  },
                   "typeAlias": {
                     "type": [
                       "string",
@@ -79913,6 +80096,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_fields/src/View/Fields/JsonapiView.php"
+                    },
                     "title": {
                       "type": "string",
                       "maxLength": 255,
@@ -80412,6 +80600,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_fields/src/View/Groups/JsonapiView.php"
+                    },
                     "title": {
                       "type": "string",
                       "maxLength": 255,
@@ -80764,6 +80957,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_fields/src/View/Groups/JsonapiView.php"
+                  },
                   "typeAlias": {
                     "type": [
                       "string",
@@ -86533,6 +86731,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_languages/src/View/Languages/JsonapiView.php"
+                  },
                   "asset_id": {
                     "anyOf": [
                       {
@@ -115636,6 +115839,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_menus/src/View/Menus/JsonapiView.php"
+                  },
                   "menutype": {
                     "type": "string",
                     "maxLength": 24,
@@ -117835,6 +118043,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_menus/src/View/Items/JsonapiView.php"
+                  },
                   "parent_id": {
                     "anyOf": [
                       {
@@ -118260,6 +118473,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_menus/src/View/Items/JsonapiView.php"
+                    },
                     "menutype": {
                       "type": "string",
                       "maxLength": 24,
@@ -119640,6 +119858,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer. The view copies it from the `message_id` column.",
+                      "x-source": "api/components/com_messages/src/View/Messages/JsonapiView.php"
+                    },
                     "user_id_from": {
                       "anyOf": [
                         {
@@ -119787,6 +120010,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer. The view copies it from the `message_id` column.",
+                    "x-source": "api/components/com_messages/src/View/Messages/JsonapiView.php"
+                  },
                   "user_id_from": {
                     "anyOf": [
                       {
@@ -139477,6 +139705,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_modules/src/View/Modules/JsonapiView.php"
+                  },
                   "typeAlias": {
                     "type": [
                       "string",
@@ -142545,6 +142778,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_newsfeeds/src/View/Feeds/JsonapiView.php"
+                    },
                     "name": {
                       "type": "string",
                       "maxLength": 100,
@@ -142723,6 +142961,32 @@
                         "null"
                       ],
                       "x-type-origin": "textual joined/view attribute"
+                    },
+                    "created_by": {
+                      "anyOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "^-?[0-9]+$"
+                        }
+                      ],
+                      "description": "ID of the user who created the item. The same user is in `relationships.created_by`.",
+                      "x-source": "api/components/com_newsfeeds/src/View/Feeds/JsonapiView.php"
+                    },
+                    "modified_by": {
+                      "anyOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "^-?[0-9]+$"
+                        }
+                      ],
+                      "description": "ID of the user who last modified the item. The same user is in `relationships.modified_by`.",
+                      "x-source": "api/components/com_newsfeeds/src/View/Feeds/JsonapiView.php"
                     }
                   },
                   "additionalProperties": false
@@ -142800,6 +143064,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_newsfeeds/src/View/Feeds/JsonapiView.php"
+                  },
                   "name": {
                     "type": "string",
                     "maxLength": 100,
@@ -143224,6 +143493,48 @@
                       }
                     ],
                     "x-type-origin": "registry/model/view transformation"
+                  },
+                  "created_by": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^-?[0-9]+$"
+                      }
+                    ],
+                    "description": "ID of the user who created the item. The same user is in `relationships.created_by`.",
+                    "x-source": "api/components/com_newsfeeds/src/View/Feeds/JsonapiView.php"
+                  },
+                  "modified_by": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^-?[0-9]+$"
+                      }
+                    ],
+                    "description": "ID of the user who last modified the item. The same user is in `relationships.modified_by`.",
+                    "x-source": "api/components/com_newsfeeds/src/View/Feeds/JsonapiView.php"
+                  },
+                  "tags": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "array",
+                        "maxItems": 0
+                      }
+                    ],
+                    "description": "Tags of the item: an object with the tag ID as key and the tag title as value; an empty array when the item has no tags. The same tag IDs are in `relationships.tags`. With more than one tag, a title can be paired with the wrong ID: Joomla combines the tag IDs in the order of the tag mapping with the titles in alphabetical order (`array_combine` in the view).",
+                    "x-source": "api/components/com_newsfeeds/src/View/Feeds/JsonapiView.php"
                   }
                 },
                 "additionalProperties": false
@@ -155367,6 +155678,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_plugins/src/View/Plugins/JsonapiView.php"
+                  },
                   "name": {
                     "type": "string",
                     "maxLength": 100,
@@ -156387,6 +156703,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_privacy/src/View/Consents/JsonapiView.php"
+                    },
                     "user_id": {
                       "anyOf": [
                         {
@@ -156523,6 +156844,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_privacy/src/View/Consents/JsonapiView.php"
+                  },
                   "user_id": {
                     "anyOf": [
                       {
@@ -157018,6 +157344,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_redirect/src/View/Redirect/JsonapiView.php"
+                    },
                     "old_url": {
                       "type": "string",
                       "maxLength": 2048,
@@ -157162,6 +157493,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_redirect/src/View/Redirect/JsonapiView.php"
+                  },
                   "old_url": {
                     "type": "string",
                     "maxLength": 2048,
@@ -158335,6 +158671,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_tags/src/View/Tags/JsonapiView.php"
+                    },
                     "title": {
                       "type": "string",
                       "maxLength": 255,
@@ -159587,6 +159928,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_tags/src/View/Tags/JsonapiView.php"
+                  },
                   "parent_id": {
                     "anyOf": [
                       {
@@ -163024,6 +163370,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_templates/src/View/Styles/JsonapiView.php"
+                  },
                   "template": {
                     "type": "string",
                     "maxLength": 50,
@@ -165706,6 +166057,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_users/src/View/Users/JsonapiView.php"
+                    },
                     "name": {
                       "type": "string",
                       "maxLength": 400,
@@ -165877,6 +166233,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_users/src/View/Users/JsonapiView.php"
+                  },
                   "groups": {
                     "anyOf": [
                       {
@@ -167016,6 +167377,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_users/src/View/Groups/JsonapiView.php"
+                    },
                     "parent_id": {
                       "anyOf": [
                         {
@@ -167131,6 +167497,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_users/src/View/Groups/JsonapiView.php"
+                  },
                   "parent_id": {
                     "anyOf": [
                       {
@@ -167385,6 +167756,11 @@
                 "attributes": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                      "x-source": "api/components/com_users/src/View/Levels/JsonapiView.php"
+                    },
                     "title": {
                       "type": "string",
                       "maxLength": 100,
@@ -167452,6 +167828,11 @@
               "attributes": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID of the item: the same value as `data.id`, but as an integer.",
+                    "x-source": "api/components/com_users/src/View/Levels/JsonapiView.php"
+                  },
                   "title": {
                     "type": "string",
                     "maxLength": 100,
