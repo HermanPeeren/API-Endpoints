@@ -3,7 +3,7 @@
 Each release describes the core Web Services API of one Joomla minor version: release 6.2.x is for
 Joomla 6.2. A patch release (6.2.1, 6.2.2, ...) improves the description of the same API.
 
-## Unreleased
+## 6.2.2
 
 Response attributes now match what the API views of Joomla render (checked against joomla-cms 6.2.0 and
 `6.3-dev`, whose API code is the same):
@@ -15,6 +15,8 @@ Response attributes now match what the API views of Joomla render (checked again
 - `urls` removed from the attributes of the article list: the list query does not select it.
 - `articletext`: the request bodies of articles say that it has no effect on update, and that `introtext` and
   `fulltext` win over it on create.
+- The `tags` of contacts and newsfeeds describe a bug in Joomla: with more than one tag, a title can be paired
+  with the wrong tag ID (the same bug was fixed for articles in Joomla 4.4.0).
 
 ## 6.2.1
 
